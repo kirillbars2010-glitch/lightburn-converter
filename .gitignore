@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+web_results/
+*_vectors/
+*.tmp.json
+*.tmp.txt
+.venv/

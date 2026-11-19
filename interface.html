@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PDF → LightBurn</title>
+<style>
+:root{color-scheme:dark; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:#0c111b;color:#edf2fa}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 75% 0%,#1c3043 0,transparent 38%),#0c111b}main{max-width:850px;margin:auto;padding:54px 24px 70px}.brand{color:#75e3c2;font-size:13px;letter-spacing:.18em;font-weight:750;text-transform:uppercase}.heading{margin:32px 0 26px}h1{font-size:clamp(32px,5vw,48px);letter-spacing:-.045em;line-height:1.08;margin:0 0 14px}p{color:#a7b5c8;line-height:1.6;margin:0}.panel{background:#141d2a;border:1px solid #2b394a;border-radius:20px;padding:28px;box-shadow:0 24px 70px #0004}.step{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#8ea1b5;font-weight:700;margin-bottom:12px}.drop{display:block;border:1.5px dashed #53677b;border-radius:14px;background:#111a26;text-align:center;padding:35px 18px;cursor:pointer;transition:.2s}.drop:hover,.drop.drag{border-color:#75e3c2;background:#172b30}.icon{display:grid;place-items:center;margin:0 auto 14px;width:48px;height:48px;border-radius:14px;background:#253d40;color:#8ef0d1;font-size:24px}.drop strong{display:block;margin-bottom:6px}.drop span{font-size:14px;color:#a7b5c8}.drop u{color:#84eacb;text-underline-offset:3px}input[type=file]{position:absolute;width:1px;height:1px;opacity:0}.drop:focus-within{outline:2px solid #86ebcd;outline-offset:3px}.selected{display:none;margin-top:12px;color:#dce9f4;font-size:14px;overflow-wrap:anywhere}.settings{margin-top:28px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}label.field{font-size:14px;font-weight:650}input[type=number]{display:block;width:100%;margin-top:8px;padding:12px 13px;background:#0e1722;border:1px solid #3a4a5c;border-radius:9px;color:#fff;font:inherit}input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #86ebcd;outline-offset:3px}.hint{display:block;color:#899bae;font-size:12px;font-weight:400;margin-top:7px;line-height:1.4}.actions{display:flex;align-items:center;gap:16px;margin-top:26px}button{border:0;border-radius:10px;background:#80e8c8;color:#09231d;font:700 15px system-ui;padding:14px 22px;cursor:pointer}button:hover{background:#a3f4dc}button:disabled{opacity:.55;cursor:not-allowed}.note{font-size:13px}.status{margin-top:22px}.status:empty{display:none}.error{color:#ffaaa7;background:#472a30;border:1px solid #79414a;padding:12px 14px;border-radius:9px;overflow-wrap:anywhere}.progress{margin-top:20px}.progress[hidden],.result[hidden]{display:none}.progress-label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:9px;color:#c8d5e4}progress{width:100%;height:8px;accent-color:#80e8c8}.result{margin-top:24px;border-top:1px solid #324052;padding-top:22px}.result h2{font-size:18px;margin:0 0 8px}.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.links a{color:#9ef0d6;text-decoration:none;border:1px solid #426a65;border-radius:9px;padding:10px 16px;font-weight:700;font-size:14px}.links a:hover{background:#203b39}.footer{font-size:12px;color:#788a9e;margin-top:20px}@media(max-width:520px){main{padding:35px 16px}.panel{padding:20px}.grid{grid-template-columns:1fr}.actions{align-items:flex-start;flex-direction:column}button{width:100%}}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand">◈ &nbsp; PDF / SVG / LightBurn</div>
+  <div class="heading"><h1>Из PDF и SVG — в LightBurn</h1><p>Подготовьте файлы для лазерной резки и гравировки. Загрузите PDF или SVG и настройте параметры конвертации.</p></div>
+  <section class="panel" aria-label="Конвертация файла">
+    <form id="form" novalidate>
+      <div class="step">01 / Исходный файл</div>
+      <label class="drop" id="drop"><input id="file" type="file" accept=".pdf,.svg,application/pdf,image/svg+xml"><div class="icon" aria-hidden="true">↑</div><strong>Перетащите PDF или SVG сюда</strong><span>или <u>выберите файл</u> на устройстве</span></label>
+      <div class="selected" id="selected"></div>
+      <p style="margin-top:16px;color:#ffd38a" role="note">⚠ Поддержуется только непрозрачная чёрно-белая векторная графика. Цветные и серые объекты необходимо заранее преобразовать в чёрные или белые. Белые фигуры считаются дорожками, чёрные — вырезами.</p>
+      <div class="settings"><div class="step">02 / Настройки</div><div class="grid">
+        <label class="field">Разрешение, DPI<input id="dpi" type="number" value="600" min="72" max="2400" step="1" required><span class="hint">Только для PNG, 72–2400 DPI</span></label>
+        <label class="field">Допуск, tolerance<input id="tolerance" type="number" value="0.01" min="0.000001" max="0.1" step="any" required><span class="hint">Точность векторных контуров в pt</span></label>
+      </div></div>
+      <div class="actions"><button id="submit" type="submit">Конвертировать →</button><p class="note">Результаты будут доступны после обработки</p></div>
+    </form>
+    <div id="progress" class="progress" hidden role="status"><div class="progress-label"><span>Конвертируем файл…</span><span>Пожалуйста, подождите</span></div><progress aria-label="Конвертация в процессе"></progress></div>
+    <div id="status" class="status" role="alert"></div>
+    <section id="result" class="result" hidden aria-live="polite"><h2>Готово к работе</h2><p id="message"></p><div class="links" id="links"></div></section>
+  </section>
+  <p class="footer">PDF / SVG → SVG / PDF / PNG &nbsp;·&nbsp; Подготовка для LightBurn</p>
+</main>
+<script>
+(() => {
+  const form = document.getElementById('form'), input = document.getElementById('file'), drop = document.getElementById('drop'), selected = document.getElementById('selected'), status = document.getElementById('status'), progress = document.getElementById('progress'), result = document.getElementById('result'), links = document.getElementById('links'), message = document.getElementById('message'), submit = document.getElementById('submit');
+  let file = null, busy = false;
+  function error(text) { status.textContent = text; status.className = text ? 'status error' : 'status'; }
+  function choose(f) {
+    result.hidden = true; error(''); file = null;
+    if (!f) { selected.style.display = 'none'; selected.textContent = ''; return; }
+    if (!/\.(pdf|svg)$/i.test(f.name)) { selected.style.display = 'none'; selected.textContent = ''; input.value = ''; error('Выберите файл в формате PDF или SVG.'); return; }
+    file = f; selected.textContent = 'Выбран файл: ' + f.name; selected.style.display = 'block';
+  }
+  input.addEventListener('change', () => choose(input.files[0]));
+  ['dragenter','dragover'].forEach(type => drop.addEventListener(type, e => { e.preventDefault(); if (!busy) drop.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(type => drop.addEventListener(type, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+  drop.addEventListener('drop', e => { if (!busy) { input.value = ''; choose(e.dataTransfer.files[0]); } });
+  form.addEventListener('submit', async e => {
+    e.preventDefault(); if (busy) return; error(''); result.hidden = true;
+    if (!file) { error('Сначала выберите PDF или SVG.'); return; }
+    const dpi = document.getElementById('dpi'), tolerance = document.getElementById('tolerance');
+    if (!dpi.checkValidity() || !tolerance.checkValidity()) { error('Укажите DPI от 72 до 2400 и допуск больше 0 и не больше 0,1.'); return; }
+    const data = new FormData(); data.append('file', file); data.append('dpi', dpi.value); data.append('tolerance', tolerance.value);
+    busy = true; submit.disabled = true; input.disabled = true; dpi.disabled = true; tolerance.disabled = true; progress.hidden = false;
+    try {
+      const response = await fetch('/api/convert', {method:'POST', body:data});
+      let json; try { json = await response.json(); } catch (_) { throw new Error('Сервер вернул некорректный ответ.'); }
+      if (!response.ok) throw new Error(typeof json.error === 'string' && json.error ? json.error : 'Ошибка сервера: ' + response.status);
+      if (!json || !json.files || !['svg','pdf','png'].every(k => typeof json.files[k] === 'string' && json.files[k].trim())) throw new Error('В ответе сервера отсутствуют ссылки на файлы.');
+      const urls = ['svg','pdf','png'].map(k => { const url = new URL(json.files[k], location.href); if (!['http:','https:'].includes(url.protocol)) throw new Error('Сервер вернул недопустимую ссылку.'); return url.href; });
+      links.replaceChildren(); ['svg','pdf','png'].forEach((k, i) => { const a = document.createElement('a'); a.href = urls[i]; a.textContent = 'Скачать ' + k.toUpperCase(); a.setAttribute('download',''); links.appendChild(a); });
+      message.textContent = typeof json.message === 'string' && json.message ? json.message : 'Выберите нужный формат для скачивания.'; result.hidden = false;
+    } catch (err) { error(err instanceof Error ? err.message : 'Не удалось выполнить конвертацию. Проверьте соединение и попробуйте снова.'); }
+    finally { busy = false; submit.disabled = false; input.disabled = false; dpi.disabled = false; tolerance.disabled = false; progress.hidden = true; }
+  });
+})();
+</script>
+</body>
+</html>

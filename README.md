@@ -4,8 +4,8 @@
 
 **PDF / SVG → SVG · PDF · PNG**
 
-Подготовка векторных изображений плат для LightBurn  
-Prepare vector PCB artwork for LightBurn
+Изготовление печатных плат методом лазерного выжигания краски<br>
+PCB fabrication using laser paint removal
 
 [🇷🇺 Русский](#-русский) · [🇬🇧 English](#-english) · [Сообщить об ошибке / Report an issue](../../issues)
 
@@ -20,7 +20,7 @@ Prepare vector PCB artwork for LightBurn
 
 ## 🇷🇺 Русский
 
-**LightBurn Converter** — локальный инструмент для подготовки чёрно-белых векторных изображений плат к работе в LightBurn. Программа преобразует заливки и толстые линии в контуры и создаёт файлы SVG, PDF и PNG. Исходный файл не изменяется.
+**LightBurn Converter** — локальный инструмент для подготовки изображений печатных плат к изготовлению методом лазерного выжигания краски в LightBurn. Программа преобразует заливки и толстые линии в контуры и создаёт файлы SVG, PDF и PNG. Исходный файл не изменяется.
 
 > [!IMPORTANT]
 > Конвертер предназначен для изображений, в которых **белые фигуры — дорожки, а чёрные — вырезы**. Для обычной чёрной графики на белом фоне этот алгоритм не подходит. Перед работой на станке обязательно проверьте размер, отверстия и траектории в LightBurn.
@@ -32,6 +32,20 @@ Prepare vector PCB artwork for LightBurn
 - Перевод толстых линий в контуры и объединение фигур средствами Windows WPF.
 - Настройка DPI для PNG и допуска приближения векторной геометрии.
 - Сохранение размеров страницы в векторных файлах.
+
+### 📄 Настройки экспорта PDF
+
+При экспорте платы выберите следующие параметры (названия пунктов могут отличаться в вашей программе):
+
+| Параметр | Значение |
+|---|---|
+| Формат | PDF |
+| Вывод | Локальный |
+| Содержимое | Всё в графическом виде |
+| Слои | Объединённые |
+| Цвет | Чёрное на белом |
+
+После экспорта проверьте результат: для этого конвертера **белые области должны соответствовать дорожкам, а чёрные — вырезам**. Название режима «чёрное на белом» само по себе не гарантирует нужную полярность; при необходимости инвертируйте изображение в исходной программе.
 
 ### 🚀 Установка и запуск
 
@@ -69,7 +83,7 @@ python vector_convert.py "файл.svg" --dpi 600 --tolerance 0.01
 
 ## 🇬🇧 English
 
-**LightBurn Converter** is a local tool for preparing monochrome vector PCB artwork for LightBurn. It converts filled shapes and thick lines into outlines and generates SVG, PDF, and PNG files without modifying the source.
+**LightBurn Converter** is a local tool for preparing PCB artwork for fabrication using laser paint removal with LightBurn. It converts filled shapes and thick lines into outlines and generates SVG, PDF, and PNG files without modifying the source.
 
 > [!IMPORTANT]
 > This converter is intended for artwork where **white shapes represent tracks and black shapes represent cutouts**. It is not suitable for ordinary black artwork on a white background. Always check dimensions, holes, and toolpaths in LightBurn before operating your machine.
@@ -81,6 +95,20 @@ python vector_convert.py "файл.svg" --dpi 600 --tolerance 0.01
 - Convert thick lines into outlines and combine shapes using Windows WPF.
 - Adjust PNG DPI and the vector geometry approximation tolerance.
 - Preserve page dimensions in vector outputs.
+
+### 📄 PDF export settings
+
+When exporting the PCB, use the settings below (option names may vary between applications):
+
+| Setting | Value |
+|---|---|
+| Format | PDF |
+| Output | Local |
+| Content | Everything as graphics |
+| Layers | Merged |
+| Color | Black on white |
+
+After exporting, check the artwork: this converter requires **white areas to represent tracks and black areas to represent cutouts**. The name “black on white” alone does not guarantee the required polarity; invert the artwork in the source application if necessary.
 
 ### 🚀 Installation and usage
 

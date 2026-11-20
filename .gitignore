@@ -5,3 +5,8 @@ web_results/
 *.tmp.json
 *.tmp.txt
 .venv/
+.build-deps/
+build/
+dist/
+*.spec
+releases/*.exe

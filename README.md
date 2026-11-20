@@ -47,6 +47,14 @@ PCB fabrication using laser paint removal
 
 После экспорта проверьте результат: для этого конвертера **белые области должны соответствовать дорожкам, а чёрные — вырезам**. Название режима «чёрное на белом» само по себе не гарантирует нужную полярность; при необходимости инвертируйте изображение в исходной программе.
 
+### 📦 Готовая сборка для Windows
+
+Скачайте [LightBurnConverter.exe](releases/LightBurnConverter.exe) из папки релизов и запустите его двойным щелчком. Python устанавливать не нужно. Это экспериментальная standalone-сборка: если Windows покажет предупреждение SmartScreen, проверьте файл и разрешите запуск только если доверяете источнику.
+
+Окно EXE должно оставаться открытым во время работы — оно запускает локальный веб-интерфейс в браузере. Для обработки линий Windows используются штатные PowerShell и WPF. Результаты сохраняются в `%LOCALAPPDATA%\\LightBurnConverter\\web_results`.
+
+Если EXE не запускается, используйте исходный вариант через Python из раздела ниже и сообщите об ошибке в [Issues](../../issues).
+
 ### 🚀 Установка и запуск
 
 1. Установите **Python 3** для Windows и убедитесь, что команда `python` доступна в терминале.
@@ -109,6 +117,14 @@ When exporting the PCB, use the settings below (option names may vary between ap
 | Color | Black on white |
 
 After exporting, check the artwork: this converter requires **white areas to represent tracks and black areas to represent cutouts**. The name “black on white” alone does not guarantee the required polarity; invert the artwork in the source application if necessary.
+
+### 📦 Windows build
+
+Download [LightBurnConverter.exe](releases/LightBurnConverter.exe) from the releases folder and double-click it. Python is not required. This is an experimental standalone build; if Windows SmartScreen shows a warning, verify the source and run it only if you trust it.
+
+Keep the EXE window open while using the app — it starts the local web interface in your browser. Line processing uses the PowerShell and WPF components already included with Windows. Results are stored in `%LOCALAPPDATA%\\LightBurnConverter\\web_results`.
+
+If the EXE does not start, use the Python version below and report the problem in [Issues](../../issues).
 
 ### 🚀 Installation and usage
 

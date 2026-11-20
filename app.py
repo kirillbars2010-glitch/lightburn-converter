@@ -4,6 +4,7 @@ import email
 from email import policy
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -13,7 +14,8 @@ import uuid
 import webbrowser
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / 'web_results'
+DATA = (Path(os.environ.get('LOCALAPPDATA', Path.home())) / 'LightBurnConverter' / 'web_results'
+        if getattr(sys, 'frozen', False) else ROOT / 'web_results')
 MAX_SIZE = 50 * 1024 * 1024
 
 class Handler(BaseHTTPRequestHandler):
@@ -101,7 +103,8 @@ class Handler(BaseHTTPRequestHandler):
             source = folder / ('result' + extension)
             source.write_bytes(data)
             output = folder / 'output'
-            cmd = [sys.executable, str(ROOT / 'vector_convert.py'), str(source), '-o', str(output), '--dpi', str(dpi), '--tolerance', str(tolerance)]
+            worker = [sys.executable, '--convert-worker'] if getattr(sys, 'frozen', False) else [sys.executable, str(ROOT / 'vector_convert.py')]
+            cmd = worker + [str(source), '-o', str(output), '--dpi', str(dpi), '--tolerance', str(tolerance)]
             completed = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=300, env={**__import__('os').environ, 'PYTHONUTF8': '1'})
             if completed.returncode:
                 raise ValueError((completed.stderr or completed.stdout or 'Ошибка конвертации.').strip())
@@ -114,7 +117,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
-    DATA.mkdir(exist_ok=True)
+    DATA.mkdir(parents=True, exist_ok=True)
     server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
     url = f'http://127.0.0.1:{server.server_port}/'
     print('Откройте в браузере: ' + url, flush=True)
@@ -129,4 +132,12 @@ def main():
         server.server_close()
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == '--convert-worker':
+        sys.argv.pop(1)
+        import vector_convert
+        try:
+            vector_convert.run()
+        except Exception as exc:
+            sys.exit(f'Ошибка: {exc}')
+    else:
+        main()
